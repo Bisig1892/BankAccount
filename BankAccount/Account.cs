@@ -11,7 +11,7 @@ namespace BankAccount
     /// </summary>
     public class Account
     {
-        private double _balance;
+        public double Balance { get; private set; }
 
         /// <summary>
         /// Deposits the amount in the bank account and returns the new balance
@@ -20,22 +20,31 @@ namespace BankAccount
         /// <returns></returns>
         public double Deposit(double amt)
         {
-            _balance += amt;
-            return _balance;
+            if (amt <= 0)
+            {
+                throw new ArgumentOutOfRangeException($"{nameof(amt)} must be a positive value");
+            }
+            if (amt >= 10000)
+            {
+                throw new ArgumentOutOfRangeException($"{nameof(amt)} must be less than 10000");
+            }
+            Balance += amt;
+            return Balance;
         }
         /// <summary>
         /// Gets the current balance
         /// </summary>
-        public double Balance
-        {
-            get
-            {
-                return _balance;
-            }
-        }
         public void Withdraw(double amt)
         {
-
+            if (amt > Balance)
+            {
+                throw new ArgumentException("Insufficient funds");
+            }
+            if (amt < 0)
+            {
+                throw new ArgumentOutOfRangeException("Cannot withdaw a negative amount");
+            }
+            Balance -= amt;
         }
     }
 }
